@@ -55,30 +55,53 @@ function createScene() {
     controls.update();
 
     // Crear Sol
-    var cubeGeo = new THREE.IcosahedronGeometry(10, 1);
+    var cubeGeo = new THREE.IcosahedronGeometry(100, 1);
     cubeGeo.computeFlatVertexNormals();
     var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xee1122 });
     cube = new THREE.Mesh(cubeGeo, cubeMaterial);
-    //scene.add(cube);
+    cube.position.z -= 500;
+    scene.add(cube);
     createPlane();
 
 }
 
 function createPlane() {
     
+    var group = new THREE.Group();
+    const planeBlack = new THREE.PlaneGeometry(1000, 1000, 1, 1);
+
     const planeGeo = new THREE.PlaneGeometry(1000, 1000, 32, 32);
+    planeBlack.rotateX(-Math.PI/2);
     planeGeo.rotateX(-Math.PI/2);
     var vertices = planeGeo.vertices;
     
     for(let i = 0; i < vertices.length; i++) {
-        vertices[i].y = (Math.random() > 0.1) ? Math.random()*100 : 0;
+        vertices[i].y = (Math.random() > 0.9) ? Math.random()*100 : 0;
     }
     
-    const material = new THREE.MeshBasicMaterial( { color:0xff0000, wireframe: true});
+    planeGeo.faces.forEach((value) => {
+        const i = planeGeo.vertices[value.a];
+        const j = planeGeo.vertices[value.b];
+        const k = planeGeo.vertices[value.c];
+
+        const maximo = Math.max(i.y, j.y, k.y);
+
+        if(maximo > 20) return value.color.set(0x00ccaf);
+        value.color.set( 0xff0000 );
+    });
+
+    planeGeo.verticesNeedUpdate = true;
+    planeGeo.colorsNeedUpdate = true;
+
+
+    const material = new THREE.MeshBasicMaterial( {vertexColors: THREE.VertexColors, wireframe: true});
+    const material2 = new THREE.MeshBasicMaterial( {color: 0x000000});
+    
     var mesh = new THREE.Mesh(planeGeo, material);
 
-    scene.add(mesh);
-    
+    group.add(new THREE.Mesh(planeBlack, material2));
+    group.add(mesh);
+    scene.add(group);
     //const material2 = new THREE.MeshBasicMaterial( { color: 0x000000 } );
 }
 
