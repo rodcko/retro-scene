@@ -38,8 +38,8 @@ function createScene() {
     container.appendChild( renderer.domElement );
 
     // Camera
-    camera = new THREE.PerspectiveCamera(60, sceneWidth / sceneHeight, 1, 1000);
-    camera.position.set(0, 0, 100);
+    camera = new THREE.PerspectiveCamera(75, sceneWidth / sceneHeight, 1, 1000);
+    camera.position.set(0, 50, 200);
 
     // Luces
     var light = new THREE.DirectionalLight(0xffffff);
@@ -86,7 +86,7 @@ function createPlane() {
 
         const maximo = Math.max(i.y, j.y, k.y);
 
-        if(maximo > 20) return value.color.set(0x00ccaf);
+        if(maximo > 1) return value.color.set(0x00ccaf);
         value.color.set( 0xff0000 );
     });
 
@@ -115,6 +115,10 @@ function update() {
 function render() {
 
     controls.update();
+    camera.position.z += Math.cos(10)/10;
+    camera.position.x += Math.sin(10)/10;
+    //camera.position.y -= Math.cos(10)/10;
+    camera.lookAt(cube.position);
     console.log(renderer.info.render.calls);
     renderer.render(scene, camera);
 }
