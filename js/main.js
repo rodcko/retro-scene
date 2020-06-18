@@ -15,6 +15,7 @@ var renderer;
 var camera;
 var controls;
 var cube;
+var composer;
 
 init();
 
@@ -57,6 +58,12 @@ function createScene() {
     camera.position.set(0, 50, 500);
 
     // Bloom
+    var renderScene = new RenderPass(scene, camera);
+    var bloompass = new UnrealBloomPass(
+        new THREE.Vector2(sceneWidth, sceneHeight), 1, 0, 0);
+    composer = new EffectComposer(renderer);
+    composer.addPass(renderScene);
+    composer.addPass(bloompass);
 
     // Luces
     var light = new THREE.DirectionalLight(0xffffff);
@@ -103,8 +110,8 @@ function createPlane() {
 
         const maximo = Math.max(i.y, j.y, k.y);
 
-        if(maximo > 1) return value.color.set(0x00ccaf);
-        value.color.set( 0xff0000 );
+        if(maximo > 1) return value.color.set(0xef05fe);
+        value.color.set(0x00aaaf);
     });
 
     planeGeo.verticesNeedUpdate = true;
@@ -115,8 +122,9 @@ function createPlane() {
     const material2 = new THREE.MeshBasicMaterial( {color: 0x000000});
     
     var mesh = new THREE.Mesh(planeGeo, material);
-
-    group.add(new THREE.Mesh(planeBlack, material2));
+    var mesh2 = new THREE.Mesh(planeBlack, material2);
+    mesh2.position.y -= 10;
+    group.add(mesh2);
     group.add(mesh);
     scene.add(group);
     //const material2 = new THREE.MeshBasicMaterial( { color: 0x000000 } );
@@ -126,6 +134,7 @@ function update() {
 
     requestAnimationFrame(update);
     render();
+    composer.render();
 }
 
 // Encargar de renderizar
