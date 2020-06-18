@@ -54,11 +54,32 @@ function createScene() {
     controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
 
-    // Crear cubo
-    var cubeGeo = new THREE.BoxGeometry(10,10,10);
+    // Crear Sol
+    var cubeGeo = new THREE.IcosahedronGeometry(10, 1);
+    cubeGeo.computeFlatVertexNormals();
     var cubeMaterial = new THREE.MeshLambertMaterial({color: 0xee1122 });
     cube = new THREE.Mesh(cubeGeo, cubeMaterial);
-    scene.add(cube);
+    //scene.add(cube);
+    createPlane();
+
+}
+
+function createPlane() {
+    
+    const planeGeo = new THREE.PlaneGeometry(1000, 1000, 32, 32);
+    planeGeo.rotateX(-Math.PI/2);
+    var vertices = planeGeo.vertices;
+    
+    for(let i = 0; i < vertices.length; i++) {
+        vertices[i].y = (Math.random() > 0.1) ? Math.random()*100 : 0;
+    }
+    
+    const material = new THREE.MeshBasicMaterial( { color:0xff0000, wireframe: true});
+    var mesh = new THREE.Mesh(planeGeo, material);
+
+    scene.add(mesh);
+    
+    //const material2 = new THREE.MeshBasicMaterial( { color: 0x000000 } );
 }
 
 function update() {
@@ -71,9 +92,6 @@ function update() {
 function render() {
 
     controls.update();
-    cube.rotation.y += 0.01;
-    cube.rotation.x += 0.01;
-    cube.rotation.z += 0.01;
     console.log(renderer.info.render.calls);
     renderer.render(scene, camera);
 }
