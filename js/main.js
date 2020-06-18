@@ -26,7 +26,17 @@ function createScene() {
 
     // Escena
     scene = new THREE.Scene();
-    scene.background = new THREE.Color( 0x000000 );
+    var skybox = new THREE.CubeTextureLoader().load([
+        '../assets/skybox/skybox_right.png',
+        '../assets/skybox/skybox_left.png',
+        '../assets/skybox/skybox_up.png',
+        '../assets/skybox/skybox_down.png',
+        '../assets/skybox/skybox_back.png',
+        '../assets/skybox/skybox_front.png'
+
+    ]);
+
+    scene.background = skybox;
 
     // Render
     renderer = new THREE.WebGLRenderer( { antialias: true, alpha: true } );
@@ -38,8 +48,8 @@ function createScene() {
     container.appendChild( renderer.domElement );
 
     // Camera
-    camera = new THREE.PerspectiveCamera(75, sceneWidth / sceneHeight, 1, 1000);
-    camera.position.set(0, 50, 200);
+    camera = new THREE.PerspectiveCamera(30, sceneWidth / sceneHeight, 1, 1000);
+    camera.position.set(0, 50, 500);
 
     // Luces
     var light = new THREE.DirectionalLight(0xffffff);
