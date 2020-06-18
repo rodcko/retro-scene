@@ -1,5 +1,10 @@
 import * as THREE from "/build/three.module.js";
 import { OrbitControls } from "/jsm/controls/OrbitControls.js";
+import {UnrealBloomPass} from "/jsm/postprocessing/UnrealBloomPass.js";
+import {RenderPass} from "/jsm/postprocessing/RenderPass.js";
+import {EffectComposer} from "/jsm/postprocessing/EffectComposer.js";
+import {ShaderPass} from "/jsm/postprocessing/ShaderPass.js";
+
 
 // Variables Globales
 var container;
@@ -50,6 +55,8 @@ function createScene() {
     // Camera
     camera = new THREE.PerspectiveCamera(30, sceneWidth / sceneHeight, 1, 1000);
     camera.position.set(0, 50, 500);
+
+    // Bloom
 
     // Luces
     var light = new THREE.DirectionalLight(0xffffff);
